@@ -1,0 +1,85 @@
+    1  ls
+    2  cd ..
+    3  ls
+    4  cd ..
+    5  ls
+    6  cd home
+    7  ls
+    8  cd rakshith/
+    9  ls
+   10  cd ../../
+   11  ls
+   12  cd bin
+   13  ls
+   14  cd ../
+   15  ls
+   16  ls dev/
+   17  cd dev/
+   18  ls -a
+   19  ls -all
+   20  cd ..
+   21  ls
+   22  cd lib
+   23  ls
+   24  ls -all
+   25  cd systemd/
+   26  ls
+   27  cd boot/
+   28  ls
+   29  cd efi/
+   30  ls
+   31  cd ../../
+   32  ls
+   33  cd ..
+   34  ls
+   35  cd ..
+   36  ls
+   37  cd proc/
+   38  ls
+   39  cd ..
+   40  ls dev/
+   41  ls -all
+   42  cd proc/
+   43  ls
+   44  man ps
+   45  ps -ae
+   46  ls
+   47  vi crypto 
+   48  cd ..
+   49  ls 
+   50  ls var
+   51  ls boot/
+   52  ls
+   53  cd boot/
+   54  ls
+   55  pwd
+   56  mkdir security
+   57  ls
+   58  cd security/
+   59  mkdir gdb
+   60  cd gdb/
+   61  ls
+   62  vi main.c
+   63  gcc -fno-stack-protector -z execstack -no-pie -m32 -g main.c -o main
+   64  sudo apt install gcc
+   65  sudo apt-get update
+   66  sudo apt install gcc
+   67  gcc -fno-stack-protector -z execstack -no-pie -m32 -g main.c -o main
+   68  ls
+   69  vi main
+   70  vi main.c 
+   71  gcc -fno-stack-protector -z execstack -no-pie -m32 -g main.c -o main
+   72  vi main.c 
+   73  gcc -fno-stack-protector -z execstack -no-pie -m32 -g main.c -o main
+   74  sudo apt install gcc-multilib
+   75  gcc -fno-stack-protector -z execstack -no-pie -m32 -g main.c -o main
+   76  readelf -S main
+   77  readelf -h main > elfheader.txt
+   78  readelf -S main > elfSections.txt
+   79  readelf -h main > elfHeader.txt
+   80  rm elfheader.txt 
+   81  ls
+   82  objdump --disassembe-all ./main > main.lst
+   83  objdump --disassemble-all ./main > main.lst
+   84  vi main.lst
+   85  history > history.txt

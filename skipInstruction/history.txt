@@ -1,0 +1,412 @@
+rakshith@LOAN-RDS-D178-W:~/security/gdb$ man history
+rakshith@LOAN-RDS-D178-W:~/security/gdb$ history -c
+rakshith@LOAN-RDS-D178-W:~/security/gdb$ history
+    1  history
+rakshith@LOAN-RDS-D178-W:~/security/gdb$ cd ..
+rakshith@LOAN-RDS-D178-W:~/security$ mkdir skipInstruction.c
+rakshith@LOAN-RDS-D178-W:~/security$ rm -d skipInstruction.c/
+rakshith@LOAN-RDS-D178-W:~/security$ mkdir skipInstruction
+rakshith@LOAN-RDS-D178-W:~/security$ cd skipInstruction/
+rakshith@LOAN-RDS-D178-W:~/security/skipInstruction$ vi main.c
+rakshith@LOAN-RDS-D178-W:~/security/skipInstruction$ gcc -fno-stack-protector -z execstack -m32 -g main.c -o main
+rakshith@LOAN-RDS-D178-W:~/security/skipInstruction$ ./main
+Value of x is 0
+rakshith@LOAN-RDS-D178-W:~/security/skipInstruction$ gdb ./main
+GNU gdb (Ubuntu 12.1-0ubuntu1~22.04) 12.1
+Copyright (C) 2022 Free Software Foundation, Inc.
+License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>
+This is free software: you are free to change and redistribute it.
+There is NO WARRANTY, to the extent permitted by law.
+Type "show copying" and "show warranty" for details.
+This GDB was configured as "x86_64-linux-gnu".
+Type "show configuration" for configuration details.
+For bug reporting instructions, please see:
+<https://www.gnu.org/software/gdb/bugs/>.
+Find the GDB manual and other documentation resources online at:
+    <http://www.gnu.org/software/gdb/documentation/>.
+
+For help, type "help".
+Type "apropos word" to search for commands related to "word"...
+Reading symbols from ./main...
+(gdb) b 14
+Breakpoint 1 at 0x11ea: file main.c, line 14.
+(gdb) r
+Starting program: /home/rakshith/security/skipInstruction/main
+[Thread debugging using libthread_db enabled]
+Using host libthread_db library "/lib/x86_64-linux-gnu/libthread_db.so.1".
+
+Breakpoint 1, main () at main.c:14
+14              x = 0;
+(gdb) info locals
+x = 1
+(gdb) disassemble
+Dump of assembler code for function main:
+   0x565561cd <+0>:     lea    0x4(%esp),%ecx
+   0x565561d1 <+4>:     and    $0xfffffff0,%esp
+   0x565561d4 <+7>:     push   -0x4(%ecx)
+   0x565561d7 <+10>:    push   %ebp
+   0x565561d8 <+11>:    mov    %esp,%ebp
+   0x565561da <+13>:    push   %ebx
+   0x565561db <+14>:    push   %ecx
+   0x565561dc <+15>:    sub    $0x10,%esp
+   0x565561df <+18>:    call   0x565560a0 <__x86.get_pc_thunk.bx>
+   0x565561e4 <+23>:    add    $0x2df4,%ebx
+=> 0x565561ea <+29>:    movl   $0x0,-0xc(%ebp)
+   0x565561f1 <+36>:    push   $0x3
+   0x565561f3 <+38>:    push   $0x2
+   0x565561f5 <+40>:    push   $0x1
+   0x565561f7 <+42>:    call   0x5655619d <function>
+   0x565561fc <+47>:    add    $0xc,%esp
+   0x565561ff <+50>:    movl   $0x1,-0xc(%ebp)
+   0x56556206 <+57>:    sub    $0x8,%esp
+   0x56556209 <+60>:    push   -0xc(%ebp)
+   0x5655620c <+63>:    lea    -0x1fd0(%ebx),%eax
+   0x56556212 <+69>:    push   %eax
+   0x56556213 <+70>:    call   0x56556050 <printf@plt>
+   0x56556218 <+75>:    add    $0x10,%esp
+   0x5655621b <+78>:    nop
+   0x5655621c <+79>:    lea    -0x8(%ebp),%esp
+   0x5655621f <+82>:    pop    %ecx
+   0x56556220 <+83>:    pop    %ebx
+   0x56556221 <+84>:    pop    %ebp
+   0x56556222 <+85>:    lea    -0x4(%ecx),%esp
+   0x56556225 <+88>:    ret
+End of assembler dump.
+(gdb) info locals
+x = 1
+(gdb) load
+`system-supplied DSO at 0xf7fc4000' has disappeared; keeping its symbols.
+You can't do that when your target is `multi-thread'
+(gdb) q
+A debugging session is active.
+
+        Inferior 1 [process 1641] will be killed.
+
+Quit anyway? (y or n) y
+rakshith@LOAN-RDS-D178-W:~/security/skipInstruction$ gdb ./main
+GNU gdb (Ubuntu 12.1-0ubuntu1~22.04) 12.1
+Copyright (C) 2022 Free Software Foundation, Inc.
+License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>
+This is free software: you are free to change and redistribute it.
+There is NO WARRANTY, to the extent permitted by law.
+Type "show copying" and "show warranty" for details.
+This GDB was configured as "x86_64-linux-gnu".
+Type "show configuration" for configuration details.
+For bug reporting instructions, please see:
+<https://www.gnu.org/software/gdb/bugs/>.
+Find the GDB manual and other documentation resources online at:
+    <http://www.gnu.org/software/gdb/documentation/>.
+
+For help, type "help".
+Type "apropos word" to search for commands related to "word"...
+Reading symbols from ./main...
+(gdb) s
+The program is not being run.
+(gdb) b main
+Breakpoint 1 at 0x11ea: file main.c, line 14.
+(gdb) r
+Starting program: /home/rakshith/security/skipInstruction/main
+[Thread debugging using libthread_db enabled]
+Using host libthread_db library "/lib/x86_64-linux-gnu/libthread_db.so.1".
+
+Breakpoint 1, main () at main.c:14
+14              x = 0;
+(gdb) list
+9       }
+10
+11      void main()
+12      {
+13              int x;
+14              x = 0;
+15              function(1, 2, 3);
+16              x = 1;
+17              printf("Value of x is %d\n", x);
+18      }
+(gdb) s
+15              function(1, 2, 3);
+(gdb) info locals
+x = 0
+(gdb) info registers esp eip ebp
+esp            0xffffd2e0          0xffffd2e0
+eip            0x565561f1          0x565561f1 <main+36>
+ebp            0xffffd2f8          0xffffd2f8
+(gdb) disassemble
+Dump of assembler code for function main:
+   0x565561cd <+0>:     lea    0x4(%esp),%ecx
+   0x565561d1 <+4>:     and    $0xfffffff0,%esp
+   0x565561d4 <+7>:     push   -0x4(%ecx)
+   0x565561d7 <+10>:    push   %ebp
+   0x565561d8 <+11>:    mov    %esp,%ebp
+   0x565561da <+13>:    push   %ebx
+   0x565561db <+14>:    push   %ecx
+   0x565561dc <+15>:    sub    $0x10,%esp
+   0x565561df <+18>:    call   0x565560a0 <__x86.get_pc_thunk.bx>
+   0x565561e4 <+23>:    add    $0x2df4,%ebx
+   0x565561ea <+29>:    movl   $0x0,-0xc(%ebp)
+=> 0x565561f1 <+36>:    push   $0x3
+   0x565561f3 <+38>:    push   $0x2
+   0x565561f5 <+40>:    push   $0x1
+   0x565561f7 <+42>:    call   0x5655619d <function>
+   0x565561fc <+47>:    add    $0xc,%esp
+   0x565561ff <+50>:    movl   $0x1,-0xc(%ebp)
+   0x56556206 <+57>:    sub    $0x8,%esp
+   0x56556209 <+60>:    push   -0xc(%ebp)
+   0x5655620c <+63>:    lea    -0x1fd0(%ebx),%eax
+   0x56556212 <+69>:    push   %eax
+   0x56556213 <+70>:    call   0x56556050 <printf@plt>
+   0x56556218 <+75>:    add    $0x10,%esp
+   0x5655621b <+78>:    nop
+   0x5655621c <+79>:    lea    -0x8(%ebp),%esp
+   0x5655621f <+82>:    pop    %ecx
+   0x56556220 <+83>:    pop    %ebx
+   0x56556221 <+84>:    pop    %ebp
+   0x56556222 <+85>:    lea    -0x4(%ecx),%esp
+   0x56556225 <+88>:    ret
+End of assembler dump.
+(gdb) si
+0x565561f3      15              function(1, 2, 3);
+(gdb) si
+0x565561f5      15              function(1, 2, 3);
+(gdb) si
+0x565561f7      15              function(1, 2, 3);
+(gdb) disassemble
+Dump of assembler code for function main:
+   0x565561cd <+0>:     lea    0x4(%esp),%ecx
+   0x565561d1 <+4>:     and    $0xfffffff0,%esp
+   0x565561d4 <+7>:     push   -0x4(%ecx)
+   0x565561d7 <+10>:    push   %ebp
+   0x565561d8 <+11>:    mov    %esp,%ebp
+   0x565561da <+13>:    push   %ebx
+   0x565561db <+14>:    push   %ecx
+   0x565561dc <+15>:    sub    $0x10,%esp
+   0x565561df <+18>:    call   0x565560a0 <__x86.get_pc_thunk.bx>
+   0x565561e4 <+23>:    add    $0x2df4,%ebx
+   0x565561ea <+29>:    movl   $0x0,-0xc(%ebp)
+   0x565561f1 <+36>:    push   $0x3
+   0x565561f3 <+38>:    push   $0x2
+   0x565561f5 <+40>:    push   $0x1
+=> 0x565561f7 <+42>:    call   0x5655619d <function>
+   0x565561fc <+47>:    add    $0xc,%esp
+   0x565561ff <+50>:    movl   $0x1,-0xc(%ebp)
+   0x56556206 <+57>:    sub    $0x8,%esp
+   0x56556209 <+60>:    push   -0xc(%ebp)
+   0x5655620c <+63>:    lea    -0x1fd0(%ebx),%eax
+   0x56556212 <+69>:    push   %eax
+   0x56556213 <+70>:    call   0x56556050 <printf@plt>
+   0x56556218 <+75>:    add    $0x10,%esp
+   0x5655621b <+78>:    nop
+   0x5655621c <+79>:    lea    -0x8(%ebp),%esp
+   0x5655621f <+82>:    pop    %ecx
+   0x56556220 <+83>:    pop    %ebx
+   0x56556221 <+84>:    pop    %ebp
+   0x56556222 <+85>:    lea    -0x4(%ecx),%esp
+   0x56556225 <+88>:    ret
+End of assembler dump.
+(gdb) si
+function (a=1, b=2, c=3) at main.c:4
+4       {
+(gdb) disassemble
+Dump of assembler code for function function:
+=> 0x5655619d <+0>:     push   %ebp
+   0x5655619e <+1>:     mov    %esp,%ebp
+   0x565561a0 <+3>:     sub    $0x20,%esp
+   0x565561a3 <+6>:     call   0x56556226 <__x86.get_pc_thunk.ax>
+   0x565561a8 <+11>:    add    $0x2e30,%eax
+   0x565561ad <+16>:    movl   $0x0,-0x4(%ebp)
+   0x565561b4 <+23>:    lea    -0x14(%ebp),%eax
+   0x565561b7 <+26>:    add    $0x18,%eax
+   0x565561ba <+29>:    mov    %eax,-0x4(%ebp)
+   0x565561bd <+32>:    mov    -0x4(%ebp),%eax
+   0x565561c0 <+35>:    mov    (%eax),%eax
+   0x565561c2 <+37>:    lea    0x8(%eax),%edx
+   0x565561c5 <+40>:    mov    -0x4(%ebp),%eax
+   0x565561c8 <+43>:    mov    %edx,(%eax)
+   0x565561ca <+45>:    nop
+   0x565561cb <+46>:    leave
+   0x565561cc <+47>:    ret
+End of assembler dump.
+(gdb) info registers esp eip ebp
+esp            0xffffd2d0          0xffffd2d0
+eip            0x5655619d          0x5655619d <function>
+ebp            0xffffd2f8          0xffffd2f8
+(gdb) si 4
+0x56556226 in __x86.get_pc_thunk.ax ()
+(gdb) si
+0x56556229 in __x86.get_pc_thunk.ax ()
+(gdb) si
+0x565561a8 in function (a=1, b=2, c=3) at main.c:4
+4       {
+(gdb) si
+5               int *ret = NULL;
+(gdb) si
+7               ret = (int*)(buffer + 24);
+(gdb) x/32x $esp
+0xffffd2ac:     0xffffd444      0x00000000      0x00000000      0x01000000
+0xffffd2bc:     0x0000000b      0xf7fc4540      0x00000000      0x00000000
+0xffffd2cc:     0xffffd2f8      0x565561fc      0x00000001      0x00000002
+0xffffd2dc:     0x00000003      0xffffd320      0xf7fbe66c      0xf7fbeb20
+0xffffd2ec:     0x00000000      0xffffd310      0xf7fae000      0xf7ffd020
+0xffffd2fc:     0xf7da9519      0xffffd51a      0x00000070      0xf7ffd000
+0xffffd30c:     0xf7da9519      0x00000001      0xffffd3c4      0xffffd3cc
+0xffffd31c:     0xffffd330      0xf7fae000      0x565561cd      0x00000001
+(gdb) info locals
+ret = 0x0
+buffer = "\000\000\000\001\v\000\000\000@E\374\367\000\000\000"
+(gdb) p/x &ret
+$1 = 0xffffd2c8
+(gdb) p/x &buffer
+$2 = 0xffffd2b8
+(gdb) si
+0x565561b7      7               ret = (int*)(buffer + 24);
+(gdb) si
+0x565561ba      7               ret = (int*)(buffer + 24);
+(gdb) si
+8               (*ret) += 8;
+(gdb) info locals
+ret = 0xffffd2d0
+buffer = "\000\000\000\001\v\000\000\000@E\374\367\000\000\000"
+(gdb) disassemble
+Dump of assembler code for function function:
+   0x5655619d <+0>:     push   %ebp
+   0x5655619e <+1>:     mov    %esp,%ebp
+   0x565561a0 <+3>:     sub    $0x20,%esp
+   0x565561a3 <+6>:     call   0x56556226 <__x86.get_pc_thunk.ax>
+   0x565561a8 <+11>:    add    $0x2e30,%eax
+   0x565561ad <+16>:    movl   $0x0,-0x4(%ebp)
+   0x565561b4 <+23>:    lea    -0x14(%ebp),%eax
+   0x565561b7 <+26>:    add    $0x18,%eax
+   0x565561ba <+29>:    mov    %eax,-0x4(%ebp)
+=> 0x565561bd <+32>:    mov    -0x4(%ebp),%eax
+   0x565561c0 <+35>:    mov    (%eax),%eax
+   0x565561c2 <+37>:    lea    0x8(%eax),%edx
+   0x565561c5 <+40>:    mov    -0x4(%ebp),%eax
+   0x565561c8 <+43>:    mov    %edx,(%eax)
+   0x565561ca <+45>:    nop
+   0x565561cb <+46>:    leave
+   0x565561cc <+47>:    ret
+End of assembler dump.
+(gdb) x/x 0xffffd2d0
+0xffffd2d0:     0x565561fc
+(gdb) x/x ret
+0xffffd2d0:     0x565561fc
+(gdb) x/x buffer
+0xffffd2b8:     0x01000000
+(gdb) x/x buffer+16
+0xffffd2c8:     0xffffd2d0
+(gdb) x/x buffer+15
+0xffffd2c7:     0xffd2d000
+(gdb) x/16x buffer
+0xffffd2b8:     0x01000000      0x0000000b      0xf7fc4540      0x00000000
+0xffffd2c8:     0xffffd2d0      0xffffd2f8      0x565561fc      0x00000001
+0xffffd2d8:     0x00000002      0x00000003      0xffffd320      0xf7fbe66c
+0xffffd2e8:     0xf7fbeb20      0x00000000      0xffffd310      0xf7fae000
+(gdb) x/4x buffer
+0xffffd2b8:     0x01000000      0x0000000b      0xf7fc4540      0x00000000
+(gdb) s
+9       }
+(gdb) x/x ret
+0xffffd2d0:     0x56556204
+(gdb) x/32x $esp
+0xffffd2ac:     0xffffd444      0x00000000      0x00000000      0x01000000
+0xffffd2bc:     0x0000000b      0xf7fc4540      0x00000000      0xffffd2d0
+0xffffd2cc:     0xffffd2f8      0x56556204      0x00000001      0x00000002
+0xffffd2dc:     0x00000003      0xffffd320      0xf7fbe66c      0xf7fbeb20
+0xffffd2ec:     0x00000000      0xffffd310      0xf7fae000      0xf7ffd020
+0xffffd2fc:     0xf7da9519      0xffffd51a      0x00000070      0xf7ffd000
+0xffffd30c:     0xf7da9519      0x00000001      0xffffd3c4      0xffffd3cc
+0xffffd31c:     0xffffd330      0xf7fae000      0x565561cd      0x00000001
+(gdb) disassemble main
+Dump of assembler code for function main:
+   0x565561cd <+0>:     lea    0x4(%esp),%ecx
+   0x565561d1 <+4>:     and    $0xfffffff0,%esp
+   0x565561d4 <+7>:     push   -0x4(%ecx)
+   0x565561d7 <+10>:    push   %ebp
+   0x565561d8 <+11>:    mov    %esp,%ebp
+   0x565561da <+13>:    push   %ebx
+   0x565561db <+14>:    push   %ecx
+   0x565561dc <+15>:    sub    $0x10,%esp
+   0x565561df <+18>:    call   0x565560a0 <__x86.get_pc_thunk.bx>
+   0x565561e4 <+23>:    add    $0x2df4,%ebx
+   0x565561ea <+29>:    movl   $0x0,-0xc(%ebp)
+   0x565561f1 <+36>:    push   $0x3
+   0x565561f3 <+38>:    push   $0x2
+   0x565561f5 <+40>:    push   $0x1
+   0x565561f7 <+42>:    call   0x5655619d <function>
+   0x565561fc <+47>:    add    $0xc,%esp
+   0x565561ff <+50>:    movl   $0x1,-0xc(%ebp)
+   0x56556206 <+57>:    sub    $0x8,%esp
+   0x56556209 <+60>:    push   -0xc(%ebp)
+   0x5655620c <+63>:    lea    -0x1fd0(%ebx),%eax
+   0x56556212 <+69>:    push   %eax
+   0x56556213 <+70>:    call   0x56556050 <printf@plt>
+   0x56556218 <+75>:    add    $0x10,%esp
+   0x5655621b <+78>:    nop
+   0x5655621c <+79>:    lea    -0x8(%ebp),%esp
+   0x5655621f <+82>:    pop    %ecx
+   0x56556220 <+83>:    pop    %ebx
+   0x56556221 <+84>:    pop    %ebp
+   0x56556222 <+85>:    lea    -0x4(%ecx),%esp
+   0x56556225 <+88>:    ret
+End of assembler dump.
+(gdb) c
+Continuing.
+Value of x is 0
+[Inferior 1 (process 1654) exited with code 020]
+(gdb) q
+rakshith@LOAN-RDS-D178-W:~/security/skipInstruction$ vi main
+rakshith@LOAN-RDS-D178-W:~/security/skipInstruction$ vi main.c
+rakshith@LOAN-RDS-D178-W:~/security/skipInstruction$ gcc -fno-stack-protector -z execstack -m32 -g main.c -o main
+rakshith@LOAN-RDS-D178-W:~/security/skipInstruction$ gdb ./main
+GNU gdb (Ubuntu 12.1-0ubuntu1~22.04) 12.1
+Copyright (C) 2022 Free Software Foundation, Inc.
+License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>
+This is free software: you are free to change and redistribute it.
+There is NO WARRANTY, to the extent permitted by law.
+Type "show copying" and "show warranty" for details.
+This GDB was configured as "x86_64-linux-gnu".
+Type "show configuration" for configuration details.
+For bug reporting instructions, please see:
+<https://www.gnu.org/software/gdb/bugs/>.
+Find the GDB manual and other documentation resources online at:
+    <http://www.gnu.org/software/gdb/documentation/>.
+
+For help, type "help".
+Type "apropos word" to search for commands related to "word"...
+Reading symbols from ./main...
+(gdb) q
+rakshith@LOAN-RDS-D178-W:~/security/skipInstruction$ ./main
+Value of x is 0
+rakshith@LOAN-RDS-D178-W:~/security/skipInstruction$ history > history.txt
+rakshith@LOAN-RDS-D178-W:~/security/skipInstruction$ ls
+history.txt  main  main.c
+rakshith@LOAN-RDS-D178-W:~/security/skipInstruction$ history
+    1  history
+    2  cd ..
+    3  mkdir skipInstruction.c
+    4  rm -d skipInstruction.c/
+    5  mkdir skipInstruction
+    6  cd skipInstruction/
+    7  vi main.c
+    8  gcc -fno-stack-protector -z execstack -m32 -g main.c -o main
+    9  ./main
+   10  gdb ./main
+   11  vi main
+   12  vi main.c
+   13  gcc -fno-stack-protector -z execstack -m32 -g main.c -o main
+   14  gdb ./main
+   15  ./main
+   16  history > history.txt
+   17  ls
+   18  history
+rakshith@LOAN-RDS-D178-W:~/security/skipInstruction$ history -c
+rakshith@LOAN-RDS-D178-W:~/security/skipInstruction$ script
+Script started, output log file is 'typescript'.
+rakshith@LOAN-RDS-D178-W:~/security/skipInstruction$ ls
+history.txt  main  main.c  typescript
+rakshith@LOAN-RDS-D178-W:~/security/skipInstruction$ vi typescript
+rakshith@LOAN-RDS-D178-W:~/security/skipInstruction$ script his.txt
+Script started, output log file is 'his.txt'.
+rakshith@LOAN-RDS-D178-W:~/security/skipInstruction$ exit
+exit
+Script done.
+rakshith@LOAN-RDS-D178-W:~/security/skipInstruction$
